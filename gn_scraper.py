@@ -169,7 +169,7 @@ def main(query, start_date, end_date):
 			article = Article(article_url)
 			time.sleep(1)
 			article.download()
-			for rrr in range(0,5):
+			for rrr in range(0,6):
 				if (article.is_downloaded):
 					break
 				else:
@@ -184,34 +184,38 @@ def main(query, start_date, end_date):
 			news_src = (srcname)
 			date = (article.publish_date) 
 			
-			#Figure out some stuff about the URL
-			if (langdetect.detect(article.text) != "en"):
-				csv_writer.writerow([article_datetimes[i], date, news_src, "NON-ENGLISH", "NON-ENGLISH"])
+			#If the article is non-English, we mark it as such and don't examine the article itself
+			if (langdetect.detect(article.text) != "en"): 
+				csv_writer.writerow([article_url, article_datetimes[min(i, len(article_datetimes)-1)], date, news_src, "NON-ENGLISH", "NON-ENGLISH"])
 				meta_file.write(bytes("{0} non-English\n".format(article_url), "UTF-8"))
 				print(" ^ Not English\n")
 				
-			elif (len(article.text) > 5 ): #We only process English-language articles that actually have content in them)
+			#If the article is English but too short, mark it as ERR and don't examine it further
+			elif (len(article.text < 5):
+				meta_file.write(bytes("{0} skipped: Too short?\n".format(article_url), "UTF-8"))
+				print(" ^  skipped: Too short?\n")
+				csv_writer.writerow([article_url, article_datetimes[min(i, len(article_datetimes)-1)], date, news_src, "ERR", "ERR"])
+			
+			#We only process English-language articles that actually have content in them
+			else: 
+				#Pull remaining article information; sanitize the articles a bit to make later processing easier
 				headline = (article.title.replace("\n", "  ").replace("\r", "  ").replace(";",","))
 				fulltext = (article.text.replace("\n", "  ").replace("\r", "  ").replace(";",","))
 
-				#Write to file
+				#Write retrieved article information to file
 				csv_writer.writerow([article_url, article_datetimes[i], date, news_src, headline, fulltext])
 				
 				#Update .meta
 				meta_file.write(bytes("{0} retrieved OK\n".format(article_url), "UTF-8"))
 				print(" ^ Retrieved OK\n")
 				
-			else:
-				meta_file.write(bytes("{0} skipped: Too short?\n".format(article_url), "UTF-8"))
-				print(" ^  skipped: Too short?\n")
-				csv_writer.writerow([article_url, article_datetimes[min(i, len(article_datetimes)-1)], date, news_src, "ERR", "ERR"])
 
-		except Exception as e:
+		except Exception as e: #If any errors occur, mark the article as exceptioned
 			print(" ^ Error: {0}".format(e))
 			print(e)
 			#raise
 			meta_file.write(bytes("Error retrieving {0}: {1}\n\n".format(article_url, e), "UTF-8"))
-			csv_writer.writerow([article_url, article_datetimes[i], "ERR", "ERR", "ERR", "ERR"])
+			csv_writer.writerow([article_url, article_datetimes[i], "ERR", "ERR", "ERR", e])
 		
 	#Build a local database of links and articles
 	#while (len(search_pages) > 0):
