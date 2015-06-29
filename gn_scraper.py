@@ -90,7 +90,7 @@ def main(query, start_date, end_date):
 	driver = set_up_browser("./chromedriver/chromedriver")
 
 	#Set up the base search string, with dates and query to be filled in
-	base_search_url = "https://www.google.com/search?cf=all&ned=us&hl=en&tbm=nws&as_q={0}&as_occt=title&as_drrb=b&as_mindate={1}&as_maxdate={2}&tbs=cdr:1,cd_min:{3},cd_max:{4}&authuser=0&gws_rd=ssl#q=allintitle:{0}&hl=en&gl=us&as_drrb=b&authuser=0&tbs=cdr:1,cd_min:{3},cd_max:{4},sbd:1&tbm=nws"
+	base_search_url = "https://www.google.com/search?cf=all&ned=us&hl=en&tbm=nws&as_q={0}&as_drrb=b&as_mindate={1}&as_maxdate={2}&tbs=cdr:1,cd_min:{3},cd_max:{4}&authuser=0&gws_rd=ssl#q={0}&hl=en&gl=us&as_drrb=b&authuser=0&tbs=cdr:1,cd_min:{3},cd_max:{4},sbd:1&tbm=nws"
 
 	#Mangle YYYY-MM-DD into MM-DD-YYYY dates
 	start = datetime.datetime.strptime(start_date, "%Y-%m-%d").date(); q_start = datetime.datetime.strftime(start, "%m/%d/%Y")
@@ -169,7 +169,7 @@ def main(query, start_date, end_date):
 			article = Article(article_url)
 			time.sleep(1)
 			article.download()
-			for rrr in range(0,6):
+			for rrr in range(0,5):
 				if (article.is_downloaded):
 					break
 				else:
@@ -191,7 +191,7 @@ def main(query, start_date, end_date):
 				print(" ^ Not English\n")
 				
 			#If the article is English but too short, mark it as ERR and don't examine it further
-			elif (len(article.text < 5):
+			elif (len(article.text) < 5):
 				meta_file.write(bytes("{0} skipped: Too short?\n".format(article_url), "UTF-8"))
 				print(" ^  skipped: Too short?\n")
 				csv_writer.writerow([article_url, article_datetimes[min(i, len(article_datetimes)-1)], date, news_src, "ERR", "ERR"])
