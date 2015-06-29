@@ -40,10 +40,12 @@ def main():
 			#search_string, access_url, username, password, starting_page
 			#def main(query, start_date, end_date):
 			if (len(days) >= 5): #Don't bother splitting for very short searches
-				print("Executing search {0} from {1} to {2}".format(new_query, days[0], days[len(days)//2]) )
-				gn_scraper.main(new_query, days[0], days[len(days)//2])
-				print("Executing search {0} from {1} to {2}".format(new_query, days[len(days)//2 + 1], days[len(days)-1]) )
-				gn_scraper.main(new_query, days[len(days)//2 + 1], days[len(days)-1])
+				print("Executing search {0} from {1} to {2}".format(new_query, days[0], days[len(days)//3]) )
+				gn_scraper.main(new_query, days[0], days[len(days)//3])
+				print("Executing search {0} from {1} to {2}".format(new_query, days[len(days)//3 + 1], days[(len(days)//3)*2]) )
+				gn_scraper.main(new_query, days[len(days)//3 + 1], days[(len(days)//3)*2])
+				print("Executing search {0} from {1} to {2}".format(new_query, days[(len(days)//3)*2+1], days[len(days)-1]))
+				gn_scraper.main(new_query, days[(len(days)//3)*2+1], days[len(days)-1])
 			else:
 				print("Executing search {0} from {1} to {2} (unsplit)".format(new_query, days[0], days[len(days)-1]))
 				gn_scraper.main(new_query, days[0], days[len(days)-1])
