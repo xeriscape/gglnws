@@ -88,7 +88,7 @@ def main(tweets_file):
 				input_reader = csv.reader(input_file, dialect='excel-two')
 				for current_row in input_reader:
 					try:
-						if ((current_row[0] != input_headers[0]) and (len(current_row)==len(input_headers))): #Skip the row with the CSV file headers, skip malformed rows
+						if ((current_row[0] != input_headers[0]) and (len(current_row)==len(input_headers)) and ("NON-ENGLISH" not in current_row[4]) and ("ERR" not in current_row[4])): #Skip the row with the CSV file headers, skip malformed rows, skip non-English
 							#Do process shenanigans
 							if ((rowcount % 100 ==0) or (p is None)):	
 								if p is not None:
