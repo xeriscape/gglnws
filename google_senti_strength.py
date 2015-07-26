@@ -53,7 +53,7 @@ def get_sentiment(sentiString, p, count):
 def main(tweets_file):
 	#Set up default parameters for sentiment getting.
 	#TODO: Have this input-dependent in some way...
-	p = subprocess.Popen(shlex.split("java -jar ./SentiStrengthCom.jar trinary sentenceCombineTot paragraphCombineTot explain stdin sentidata ./SentiStrength_Data/"),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+	p = subprocess.Popen(shlex.split("java -jar SentiStrengthCom.jar sentenceCombineTot paragraphCombineTot trinary explain trinary negativeMultiplier 1 stdin sentidata ./SentiStrength_Data/"),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 
 	#Set up a pattern for (very basic!) URL recognition (see below)
 	url_pattern = re.compile("http(s)*:[^\s]+")
@@ -95,7 +95,7 @@ def main(tweets_file):
 									p.communicate(None)
 									#print "New process..."
 									sleep(0.1)
-								p = subprocess.Popen(shlex.split("java -jar SentiStrengthCom.jar trinary sentenceCombineTot paragraphCombineTot explain stdin sentidata ./SentiStrength_Data/"),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE, bufsize=1)
+								p = subprocess.Popen(shlex.split("java -jar SentiStrengthCom.jar sentenceCombineTot paragraphCombineTot trinary explain trinary negativeMultiplier 1 stdin sentidata ./SentiStrength_Data/"),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE, bufsize=1)
 
 							#Some data can just be copied
 							news_date = current_row[1]
