@@ -57,7 +57,8 @@ def get_search_chunk(driven_browser, url):
 
 			time.sleep(2)
 			success = True
-			#It's likely we'll eventually hit Google's anti-spam protection. This requires user action.
+			
+			#It's likely we'll eventually hit Google's anti-spam protection. This requires user action, no real way around that.
 			if "To continue, please type the characters below:" in driven_browser.page_source:
 				input("\n\nWe triggered Google's antispeam measures. Please switch to the Chrome window, enter the Captcha, select 'Sort by Date', then press Enter to continue...\n")
 				time.sleep(30)
@@ -68,7 +69,6 @@ def get_search_chunk(driven_browser, url):
 		except (KeyboardInterrupt, SystemExit): raise;
 		except Exception as e:
 			print(e)
-			#raise
 			success = False
 			time.sleep(3)
 				
@@ -82,7 +82,7 @@ def get_search_chunk(driven_browser, url):
 
 	return [current_links, current_dates]
 #-----------------------------------------------------------------------
-def main(query, start_date, end_date):
+def execute_search(query, start_date, end_date):
 	'''Assemble the initial set of search pages'''
 	query_urls = []; article_urls = []; article_datetimes = [];
 
@@ -216,18 +216,11 @@ def main(query, start_date, end_date):
 			#raise
 			meta_file.write(bytes("Error retrieving {0}: {1}\n\n".format(article_url, e), "UTF-8"))
 			csv_writer.writerow([article_url, article_datetimes[i], "ERR", "ERR", "ERR", e])
-		
-	#Build a local database of links and articles
-	#while (len(search_pages) > 0):
-		#Pop the next search_page
-		
-
-		#Locate various bits of information on the page via XPATH
-
-		#Append the next page of the search results to search_pages
-
-
-
 
 if __name__ == '__main__':
-	main("sony", "2011-04-23", "2011-04-25")
+	#If run directly, input parameters from user
+	query = raw_input("Query? (Example: sony)\n >   ")
+	since = raw_input("Start date? (Example: 2011-04-15)\n >   ")
+	until = raw_input("End date? (Example: 2011-05-25)\n >   ")
+	
+	execute_search(query, since, until)
