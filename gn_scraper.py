@@ -82,7 +82,7 @@ def get_search_chunk(driven_browser, url):
 
 	return [current_links, current_dates]
 #-----------------------------------------------------------------------
-def execute_search(query, start_date, end_date):
+def execute_search(query, start_date, end_date, name):
 	'''Assemble the initial set of search pages'''
 	query_urls = []; article_urls = []; article_datetimes = [];
 
@@ -100,7 +100,12 @@ def execute_search(query, start_date, end_date):
 	query_urls.append(base_search_url.format(query, q_start, q_end, q_start, q_end)) #In this version there's just one, this is a historical artefact
 
 	#Prepare output facilities
-	search_id = str(uuid.uuid4())
+	if (len(name) < 5): 
+		search_id = str(uuid.uuid4())
+		
+	else:
+		search_id = name
+		
 	file_name = "gn_"+search_id+".csv"
 	meta_name = "gn_"+search_id+".meta"
 
